@@ -12,16 +12,23 @@ class DataIngestion:
     Class to handle data transformation and ingestion into AstraDB vector store.
     """
 
-    def __init__(self):
+    def __init__(self, data: pd.DataFrame = None):
         """
         Initialize environment variables, embedding model, and set CSV file path.
+        If data is provided as a DataFrame, it will be used directly. Otherwise,
+        data will be loaded from the default CSV file.
         """
         print("Initializing DataIngestion pipeline...")
-        self.model_loader=ModelLoader()
+        self.model_loader = ModelLoader()
         self._load_env_variables()
         self.csv_path = self._get_csv_path()
-        self.product_data = self._load_csv()
-        self.config=load_config()
+        
+        if data is not None:
+            self.product_data = data
+        else:
+            self.product_data = self._load_csv()
+            
+        self.config = load_config()
 
     def _load_env_variables(self):
         """

@@ -3,6 +3,7 @@ import streamlit as st
 from prod_assistant.etl.data_scrapper import FlipkartScraper
 from prod_assistant.etl.data_ingestion import DataIngestion
 import os
+import pandas as pd
 
 st.title("📦 Product Review Scraper")
 
@@ -59,7 +60,9 @@ if st.button("🚀 Start Scraping"):
 if "scraped_data" in st.session_state and st.button("🧠 Store in Vector DB (AstraDB)"):
     with st.spinner("📡 Initializing ingestion pipeline..."):
         try:
-            ingestion = DataIngestion()
+            scraped_data = st.session_state["scraped_data"]
+            df = pd.DataFrame(scraped_data, columns=["product_id", "product_title", "rating", "total_reviews", "price", "top_reviews"])
+            ingestion = DataIngestion(data=df)
             st.info("🚀 Running ingestion pipeline...")
             ingestion.run_pipeline()
             st.success("✅ Data successfully ingested to AstraDB!")
