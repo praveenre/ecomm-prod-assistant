@@ -4,9 +4,10 @@ from prod_assistant.etl.data_scrapper import FlipkartScraper
 from prod_assistant.etl.data_ingestion import DataIngestion
 import os
 
-flipkart_scraper = FlipkartScraper()
-output_path = "data/product_reviews.csv"
 st.title("📦 Product Review Scraper")
+
+flipkart_scraper = FlipkartScraper(browser_executable_path="/snap/bin/chromium")
+output_path = "data/product_reviews.csv"
 
 if "product_inputs" not in st.session_state:
     st.session_state.product_inputs = [""]

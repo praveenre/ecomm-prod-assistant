@@ -9,8 +9,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
 class FlipkartScraper:
-    def __init__(self, output_dir="data"):
+    def __init__(self, output_dir="data", browser_executable_path=None):
         self.output_dir = output_dir
+        self.browser_executable_path = browser_executable_path
         os.makedirs(self.output_dir, exist_ok=True)
 
     def get_top_reviews(self,product_url,count=2):
@@ -19,7 +20,7 @@ class FlipkartScraper:
         options = uc.ChromeOptions()
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-blink-features=AutomationControlled")
-        driver = uc.Chrome(options=options,use_subprocess=True)
+        driver = uc.Chrome(options=options,use_subprocess=True, browser_executable_path=self.browser_executable_path, version_main=138)
 
         if not product_url.startswith("http"):
             return "No reviews found"
@@ -59,7 +60,7 @@ class FlipkartScraper:
         """Scrape Flipkart products based on a search query.
         """
         options = uc.ChromeOptions()
-        driver = uc.Chrome(options=options,use_subprocess=True)
+        driver = uc.Chrome(options=options,use_subprocess=True, browser_executable_path=self.browser_executable_path, version_main=138)
         search_url = f"https://www.flipkart.com/search?q={query.replace(' ', '+')}"
         driver.get(search_url)
         time.sleep(4)
